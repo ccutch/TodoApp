@@ -1,0 +1,38 @@
+{{block "partials/auth-form" .}}
+<form hx-post="/login" hx-swap="outerHTML" class="w-full max-w-md p-4 flex flex-col gap-2">
+    <h3 class="text-4xl font-bold">☑&nbsp;&nbsp;User Login</h3>
+
+    {{with .Error}}
+    <div class="bg-base-200 px-3 py-2 mt-2 rounded-lg">
+        <span class="text-red-500 my-2 text-lg">{{.}}</span>
+    </div>
+    {{else}}
+    <p class="text-lg">Welcome back to your todo list.</p>
+    {{end}}
+
+    <div class="w-full mt-6 mb-4 flex flex-col gap-4">
+        <input required type="email" name="email" placeholder="Your email address" class="input input-bordered">
+        <input required type="password" name="password" placeholder="A strong password" class="input input-bordered">
+    </div>
+
+    <button class="btn btn-primary">Login</button>
+    <a onclick="registerModal.showModal()" class="btn btn-ghost mt-2 mx-auto">Need an account?</a>
+</form>
+
+<dialog id="registerModal" class="modal">
+  <div class="modal-box">
+    <h3 class="mt-6 text-3xl font-bold">Welcome Aboard</h3>
+    <form hx-post="/register" hx-target="#content" class="w-full max-w-md p-4 flex flex-col gap-2">
+        <div class="w-full my-4 flex flex-col gap-4">
+            <input required type="text" name="name" placeholder="Your preferred name" class="input input-bordered">
+            <input required type="email" name="email" placeholder="Your email address" class="input input-bordered">
+            <input required type="password" name="password" placeholder="A strong password" class="input input-bordered">
+        </div>
+        <button class="btn btn-primary">Register</button>
+    </form>
+  </div>
+  <form method="dialog" class="modal-backdrop">
+    <button></button>
+  </form>
+</dialog>
+{{end}}

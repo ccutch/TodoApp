@@ -1,0 +1,52 @@
+{{block "partials/todo-list" .}}
+<div id="todo-list" class="h-full flex flex-col py-8 w-full max-w-2xl">
+    <header class="mb-8 flex flex-col md:flex-row items-center justify-between gap-8 px-8">
+        <h2 class="whitespace-nowrap text-start text-4xl font-bold">My Todos</h2>
+        <form hx-post="/create" hx-swap="afterbegin" hx-target="#todos" class="mb-0 w-full flex item-center gap-2"
+              hx-on::after-request="this.reset()">
+            <input class="w-full input" autofocus="autofocus"
+                   required type="text" name="text" placeholder="Create a new todo">
+            <button class="btn btn-secondary">
+                + Create
+            </button>
+        </form>
+    </header>
+    <table class="table">
+        <tbody id="todos" hx-swap="outerHTML">
+          {{range .Todos}}
+          {{template "partials/todo-item" .}}
+          {{end}}
+        </tbody>
+    </table>
+</div>
+{{end}}
+
+{{define "partials/todo-item"}}
+<tr hx-target="closest tr" hx-post="/toggle/{{.ID}}">
+    <th>
+      <label>
+        <input type="checkbox" class="checkbox" 
+            {{if .Complete}}
+            checked="checked"
+            {{end}}
+        >
+      </label>
+    </th>
+    <td class="w-full">
+      <span class="text-lg font-semibold {{if .Complete}}line-through{{end}}">
+        {{.Text}}
+      </span>
+    </td>
+    <th class="w-max">
+      <button class="w-max btn btn-ghost btn-sm" onclick="event.stopPropagation();"
+        hx-post="/clear/{{.ID}}" 
+        {{if not .Complete}}
+        hx-confirm="Are you sure you wish to delete this before completion?"
+        {{end}}
+      >
+          <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 448 512" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M170.5 51.6L151.5 80h145l-19-28.4c-1.5-2.2-4-3.6-6.7-3.6H177.1c-2.7 0-5.2 1.3-6.7 3.6zm147-26.6L354.2 80H368h48 8c13.3 0 24 10.7 24 24s-10.7 24-24 24h-8V432c0 44.2-35.8 80-80 80H112c-44.2 0-80-35.8-80-80V128H24c-13.3 0-24-10.7-24-24S10.7 80 24 80h8H80 93.8l36.7-55.1C140.9 9.4 158.4 0 177.1 0h93.7c18.7 0 36.2 9.4 46.6 24.9zM80 128V432c0 17.7 14.3 32 32 32H336c17.7 0 32-14.3 32-32V128H80zm80 64V400c0 8.8-7.2 16-16 16s-16-7.2-16-16V192c0-8.8 7.2-16 16-16s16 7.2 16 16zm80 0V400c0 8.8-7.2 16-16 16s-16-7.2-16-16V192c0-8.8 7.2-16 16-16s16 7.2 16 16zm80 0V400c0 8.8-7.2 16-16 16s-16-7.2-16-16V192c0-8.8 7.2-16 16-16s16 7.2 16 16z"></path></svg>
+          delete
+      </button>
+    </th>
+</tr>
+{{end}}

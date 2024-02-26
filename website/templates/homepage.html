@@ -1,0 +1,35 @@
+<html data-theme="aqua">
+    <head>
+        <title>Todo List</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!-- HTMX imports -->
+        <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+        <script src="https://unpkg.com/htmx.org/dist/ext/sse.js"></script>
+        
+        <!-- Daisy imports -->
+        <link href="https://cdn.jsdelivr.net/npm/daisyui@4.7.2/dist/full.min.css" rel="stylesheet" type="text/css" />
+        <script src="https://cdn.tailwindcss.com"></script>
+    </head>
+    <body class="flex flex-col h-screen">
+        <div class="navbar bg-base-100">
+          <a class="btn btn-ghost text-xl">
+            ☑&nbsp;&nbsp;Todos App
+          </a>
+          <button hx-post="/logout" class="ml-auto btn btn-ghost">
+              Logout
+          </button>
+        </div>
+
+        <div class="hero h-full bg-base-200">
+          <div id="content" class="p-0 h-full w-full hero-content text-center">
+            {{if .Token}}
+            {{template "partials/todo-list" .}}
+            {{else}}
+            {{template "partials/auth-form" .}}
+            {{end}}
+          </div>
+        </div>
+    </body>
+</html>
